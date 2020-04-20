@@ -1,0 +1,27 @@
+{
+  "name": "kicken/copyleaks-api",
+  "description": "Copyleaks API",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Keith Maika",
+      "email": "keithm@aoeex.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Kicken\\Copyleaks\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=7.1",
+    "ext-json": "*",
+    "ext-dom": "*",
+    "psr/log": "^1.0",
+    "guzzlehttp/guzzle": "^6.5"
+  },
+  "require-dev": {
+    "monolog/monolog": "^2.0"
+  }
+}
