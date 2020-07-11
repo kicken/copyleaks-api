@@ -16,48 +16,61 @@ Here are quick examples to help you get going.  Read the library source for more
 
 **Submit a document for scanning using a URL.**
 
-    $client = new CopyleaksAPI();
-    //Enable logging using PSR1 logger if desired
-    //$client->setLogger($client)
+    const API_EMAIL = 'test@example.com';
+    const API_KEY = 'secret_api_key';
 
-    //Get authorizatioon token (login)
-    $response = $client->account()->login($accountEmail, $apikey);
+    $client = new CopyleaksAPI();
+
+    //Get authorization token (login)
+    $response = $client->account()->login(new LoginParameters(API_EMAIL, API_KEY));
     $client->setAuthorization($response->accessToken);
 
     //Setup callback URLs
     $scanId = mt_rand();
-    $documentUrl = 'https://example.com/webhook/download?scan='.$scanId;
-    $statusUrl = 'https://example.com/webhook/status?scan='.$scanId.'&status={STATUS}';
+    $documentUrl = 'https://example.com/webhook.php?scan=' . $scanId . '&action=download';
+    $statusUrl = 'https://example.com/webhook.php?scan=' . $scanId . '&action=status&status={STATUS}';
 
     //Submit scan request
-    $parameters = new SubmitUrlParameters($paperUrl, $scanId, $completeUrl);
-    $education->submitURL($parameters);
+    $parameters = new SubmitUrlParameters($documentUrl, $scanId, $statusUrl);
+    $client->education()->submitURL($parameters);
 
 **Export results when complete**
 
-    //Complete webhook receives json post data.
-    $scanId = $_GET['scan'];
-    $scanData = json_decode(file_get_input('php://input'));
-    $scanData = \Kicken\Copyleaks\Model\Webhook\Completed::createFromJsonObject($scanData);
+    const API_EMAIL = 'test@example.com';
+    const API_KEY = 'secret_api_key';
 
-    $exportId = date('YmdHis');
-    $exportCompleteUrl = 'https://example.com/webhook/export?scan='.$scanId.'&export='.$exportId;
+    $json = json_decode(file_get_contents('php://input'));
+    $data = Completed::createFromJsonObject($json);
 
-    $exportParameters = new \Kicken\Copyleaks\Model\Download\ExportParameters($scanId, $exportId, $exportCompleteUrl);
-    //Request a copy of the document's text as seen by Copyleaks
-    $callbackUrl = 'https://example.com/webhook/export/crawled?scan='.$scanId;
-    $exportParameters->crawledVersion($callbackUrl);
+    $matchMap = [
+        'internet' => $data->results->internet,
+        'database' => $data->results->database
+    ];
 
-    //Request details for each match.
-    foreach ($scanData->results->internet as $item){
-        $callbackUrl = 'https://example.com/webhook/export/result?scan='.$scanId.'&result='.$item->id;
-        $exportParameters->result($item->id, $callbackUrl);
+    $exportId = date('Ymd\tHis');
+    $completeHook = 'https://example.com/webhook.php?' . http_build_query([
+            'scan' => $scanId,
+            'action' => 'export',
+            'what' => 'complete'
+        ]);
+    $exportParameters = new ExportParameters($scanId, $exportId, $completeHook);
+    foreach ($matchMap as $type => $matchList){
+        /** @var ResultItem $resultItem */
+        foreach ($matchList as $resultItem){
+            $resultHook = 'https://example.com/webhook.php?' . http_build_query([
+                    'scan' => $scanId,
+                    'action' => 'export',
+                    'what' => 'result',
+                    'id' => $resultItem->id
+                ]);
+            $exportParameters->result($resultItem->id, $resultHook);
+        }
     }
 
-    $authorization = loadSavedAuthorizationToken();
-    $client = new CopyleaksAPI($authorization);
+    $client = new CopyleaksAPI();
+    $response = $client->account()->login(new LoginParameters(API_EMAIL, API_KEY));
+    $client->setAuthorization($response->accessToken);
     $client->download()->export($exportParameters);
-
 
 ## Known issues
 I've only implemented the API endpoints that are necessary for my use case so far.
