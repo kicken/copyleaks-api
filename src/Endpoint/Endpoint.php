@@ -14,7 +14,6 @@ abstract class Endpoint {
 
     public function __construct(ClientFactory $factory, LoggerInterface $logger){
         $this->clientFactory = $factory;
-        $this->clientFactory->setBaseUri($this->getBaseUri());
         $this->logger = $logger;
     }
 
@@ -22,7 +21,9 @@ abstract class Endpoint {
 
     protected function sendRequest(string $method, string $endpoint, $bodyData = null) : EndpointResponse{
         try {
-            $options = [];
+            $options = [
+                'base_uri' => $this->getBaseUri()
+            ];
             if ($bodyData){
                 $options['json'] = $bodyData;
             }
