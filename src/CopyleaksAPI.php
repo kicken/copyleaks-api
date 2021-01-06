@@ -10,6 +10,7 @@ use GuzzleHttp\Middleware;
 use Kicken\Copyleaks\Endpoint\Account;
 use Kicken\Copyleaks\Endpoint\Download;
 use Kicken\Copyleaks\Endpoint\Education;
+use Kicken\Copyleaks\Endpoint\Business;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -52,7 +53,7 @@ class CopyleaksAPI implements LoggerAwareInterface {
     }
 
     public function business(){
-        throw new NotImplementedException();
+        return new Business($this->factory, $this->logger);
     }
 
     public function download(){
