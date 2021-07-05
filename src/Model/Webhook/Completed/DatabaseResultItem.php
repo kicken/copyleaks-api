@@ -9,7 +9,9 @@ class DatabaseResultItem extends ResultItem {
 
     public static function createFromJsonObject(\stdClass $json){
         $self = parent::createFromJsonObject($json);
-        $self->scanId = $json->scanId;
+        if (property_exists($json, 'scanId')){
+            $self->scanId = $json->scanId;
+        }
 
         return $self;
     }
