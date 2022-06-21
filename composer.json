@@ -1,5 +1,6 @@
 {
   "name": "kicken/copyleaks-api",
+  "type": "library",
   "description": "Copyleaks API",
   "minimum-stability": "stable",
   "license": "MIT",
