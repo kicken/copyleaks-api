@@ -10,7 +10,7 @@ The easiest way to install this is to use composer.
 
 ## Usage
 
-First create a new instance of the **CopyleaksAPI** class.  Then you can use the *account()*, *education()*, *business()*, and *download()* methods to access the api endpoints.  To authenticate with the API either pass a pre-existing authorization token to the constructor or call the `account()->login()` method to grab a new token.
+First create a new instance of the **CopyleaksAPI** class.  Then you can use the *education()*, *business()*, and *download()* methods to access the api endpoints. 
 
 Here are quick examples to help you get going.  Read the library source for more details about features and how to use the library.
 
@@ -19,11 +19,7 @@ Here are quick examples to help you get going.  Read the library source for more
     const API_EMAIL = 'test@example.com';
     const API_KEY = 'secret_api_key';
 
-    $client = new CopyleaksAPI();
-
-    //Get authorization token (login)
-    $response = $client->account()->login(new LoginParameters(API_EMAIL, API_KEY));
-    $client->setAuthorization($response->accessToken);
+    $client = new CopyleaksAPI(API_EMAIL, API_KEY);
 
     //Setup callback URLs
     $scanId = mt_rand();
@@ -67,9 +63,7 @@ Here are quick examples to help you get going.  Read the library source for more
         }
     }
 
-    $client = new CopyleaksAPI();
-    $response = $client->account()->login(new LoginParameters(API_EMAIL, API_KEY));
-    $client->setAuthorization($response->accessToken);
+    $client = new CopyleaksAPI(API_EMAIL, API_KEY);
     $client->download()->export($exportParameters);
 
 ## Known issues
