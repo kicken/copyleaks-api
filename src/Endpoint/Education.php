@@ -66,7 +66,9 @@ class Education extends Endpoint {
     }
 
     public function credits(){
-        throw new NotImplementedException();
+        $response = $this->sendRequest('GET', 'scans/credits');
+
+        return $response->decodeJson();
     }
 
     public function usageHistory(){
