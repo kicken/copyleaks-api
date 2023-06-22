@@ -4,9 +4,7 @@
 namespace Kicken\Copyleaks;
 
 
-use Kicken\Copyleaks\Endpoint\Business;
-use Kicken\Copyleaks\Endpoint\Download;
-use Kicken\Copyleaks\Endpoint\Education;
+use Kicken\Copyleaks\Endpoint\Scans;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -25,15 +23,7 @@ class CopyleaksAPI implements LoggerAwareInterface {
         $this->factory->setLogger($logger);
     }
 
-    public function education() : Education{
-        return new Education($this->factory, $this->logger);
-    }
-
-    public function business() : Business{
-        return new Business($this->factory, $this->logger);
-    }
-
-    public function download() : Download{
-        return new Download($this->factory, $this->logger);
+    public function scans() : Scans{
+        return new Scans($this->factory, $this->logger);
     }
 }
