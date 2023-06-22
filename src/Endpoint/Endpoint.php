@@ -33,10 +33,16 @@ abstract class Endpoint {
             $response = $ex->getResponse();
         }
 
+
         if (!$response || $response->getStatusCode() >= 300){
-            throw new EndpointException($response);
+            if (!$response){
+                $this->logger->warning('No response received.');
+            } else {
+                $this->logger->warning('Bad response status code');
+            }
+            throw new EndpointException($response, $this->logger);
         }
 
-        return new EndpointResponse($response);
+        return new EndpointResponse($response, $this->logger);
     }
 }

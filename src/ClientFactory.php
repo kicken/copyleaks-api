@@ -49,7 +49,7 @@ class ClientFactory implements LoggerAwareInterface {
 
         $this->client = new Client($options);
         $stack->push(Middleware::log($this->logger, new MessageFormatter(MessageFormatter::DEBUG)));
-        $stack->push(new AuthorizationMiddleware($this->email, $this->apiKey, $this->client));
+        $stack->push(new AuthorizationMiddleware($this->email, $this->apiKey, $this->client, $this->logger));
 
 
         return $this->client;

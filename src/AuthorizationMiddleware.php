@@ -7,17 +7,20 @@ use Kicken\Copyleaks\Endpoint\EndpointException;
 use Kicken\Copyleaks\Endpoint\EndpointResponse;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 class AuthorizationMiddleware {
     private string $email;
     private string $apiKey;
     private Client $client;
     private ?string $token = null;
+    private LoggerInterface $logger;
 
-    public function __construct(string $email, string $apiKey, Client $client){
+    public function __construct(string $email, string $apiKey, Client $client, LoggerInterface $logger){
         $this->email = $email;
         $this->apiKey = $apiKey;
         $this->client = $client;
+        $this->logger = $logger;
     }
 
     public function __invoke(callable $next) : \Closure{
@@ -27,19 +30,19 @@ class AuthorizationMiddleware {
             }
 
             if (!$this->token){
+                $this->logger->notice('Fetching authorization token');
                 $this->token = $this->fetchAuthenticationToken();
             }
 
             return $next($this->addAuth($request), $options)->then(function(ResponseInterface $response) use ($next, $request, $options){
                 $status = $response->getStatusCode();
-                if ($status === 200){
-                    return $response;
-                } else if ($status === 401){
+                if ($status === 401){
+                    $this->logger->notice('Renewing authorization token.');
                     $this->token = $this->fetchAuthenticationToken();
 
                     return $next($this->addAuth($request), $options);
                 } else {
-                    throw new EndpointException($response);
+                    return $response;
                 }
             });
         };
@@ -57,10 +60,11 @@ class AuthorizationMiddleware {
             ]
         ]);
         if ($response->getStatusCode() !== 200){
-            throw new EndpointException($response);
+            $this->logger->error('Unable to obtain authorization token.');
+            throw new EndpointException($response, $this->logger);
         }
 
-        $response = new EndpointResponse($response);
+        $response = new EndpointResponse($response, $this->logger);
         $data = $response->decodeJson();
 
         return $data->access_token;
