@@ -10,19 +10,19 @@ use Kicken\Copyleaks\Model\Businesses\SubmitUrlParameters;
 use Kicken\Copyleaks\NotImplementedException;
 
 class Business extends Endpoint {
-    private $sandboxMode = false;
+    private bool $sandboxMode = false;
 
-    protected function getBaseUri(){
+    protected function getBaseUri() : string{
         return 'https://api.copyleaks.com/v3/';
     }
 
-    public function enableSandboxMode(){
+    public function enableSandboxMode() : Business{
         $this->sandboxMode = true;
 
         return $this;
     }
 
-    public function submitURL(SubmitUrlParameters $parameters){
+    public function submitURL(SubmitUrlParameters $parameters) : void{
         if ($this->sandboxMode){
             $parameters->properties['sandbox'] = true;
         }
@@ -31,7 +31,7 @@ class Business extends Endpoint {
         $this->sendRequest('PUT', $url, $parameters);
     }
 
-    public function submitFile(SubmitFileParameters $parameters){
+    public function submitFile(SubmitFileParameters $parameters) : void{
         if ($this->sandboxMode){
             $parameters->properties['sandbox'] = true;
         }
@@ -40,7 +40,7 @@ class Business extends Endpoint {
         $this->sendRequest('PUT', $url, $parameters);
     }
 
-    public function submitOCR(SubmitOCRParameters $parameters){
+    public function submitOCR(SubmitOCRParameters $parameters) : void{
         if ($this->sandboxMode){
             $parameters->properties['sandbox'] = true;
         }
@@ -49,27 +49,27 @@ class Business extends Endpoint {
         $this->sendRequest('PUT', $url, $parameters);
     }
 
-    public function start(){
+    public function start() : void{
         throw new NotImplementedException();
     }
 
-    public function batchStart(){
+    public function batchStart() : void{
         throw new NotImplementedException();
     }
 
-    public function delete(){
+    public function delete() : void{
         throw new NotImplementedException();
     }
 
-    public function resendHooks(){
+    public function resendHooks() : void{
         throw new NotImplementedException();
     }
 
-    public function credits(){
+    public function credits() : void{
         throw new NotImplementedException();
     }
 
-    public function usageHistory(){
+    public function usageHistory() : void{
         throw new NotImplementedException();
     }
 }

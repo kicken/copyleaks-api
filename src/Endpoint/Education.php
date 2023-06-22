@@ -10,19 +10,19 @@ use Kicken\Copyleaks\Model\Education\SubmitUrlParameters;
 use Kicken\Copyleaks\NotImplementedException;
 
 class Education extends Endpoint {
-    private $sandboxMode = false;
+    private bool $sandboxMode = false;
 
-    protected function getBaseUri(){
+    protected function getBaseUri() : string{
         return 'https://api.copyleaks.com/v3/';
     }
 
-    public function enableSandboxMode(){
+    public function enableSandboxMode() : Education{
         $this->sandboxMode = true;
 
         return $this;
     }
 
-    public function submitURL(SubmitUrlParameters $parameters){
+    public function submitURL(SubmitUrlParameters $parameters) : void{
         if ($this->sandboxMode){
             $parameters->properties['sandbox'] = true;
         }
@@ -31,7 +31,7 @@ class Education extends Endpoint {
         $this->sendRequest('PUT', $url, $parameters);
     }
 
-    public function submitFile(SubmitFileParameters $parameters){
+    public function submitFile(SubmitFileParameters $parameters) : void{
         if ($this->sandboxMode){
             $parameters->properties['sandbox'] = true;
         }
@@ -40,7 +40,7 @@ class Education extends Endpoint {
         $this->sendRequest('PUT', $url, $parameters);
     }
 
-    public function submitOCR(SubmitOCRParameters $parameters){
+    public function submitOCR(SubmitOCRParameters $parameters) : void{
         if ($this->sandboxMode){
             $parameters->properties['sandbox'] = true;
         }
@@ -49,29 +49,29 @@ class Education extends Endpoint {
         $this->sendRequest('PUT', $url, $parameters);
     }
 
-    public function start(){
+    public function start() : void{
         throw new NotImplementedException();
     }
 
-    public function batchStart(){
+    public function batchStart() : void{
         throw new NotImplementedException();
     }
 
-    public function delete(){
+    public function delete() : void{
         throw new NotImplementedException();
     }
 
-    public function resendHooks(){
+    public function resendHooks() : void{
         throw new NotImplementedException();
     }
 
-    public function credits(){
+    public function credits() : \stdClass{
         $response = $this->sendRequest('GET', 'scans/credits');
 
         return $response->decodeJson();
     }
 
-    public function usageHistory(){
+    public function usageHistory() : void{
         throw new NotImplementedException();
     }
 }

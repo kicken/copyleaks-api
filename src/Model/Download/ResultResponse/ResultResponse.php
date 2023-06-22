@@ -7,14 +7,11 @@ namespace Kicken\Copyleaks\Model\Download\ResultResponse;
 use Kicken\Copyleaks\Model\JsonConstructable;
 
 class ResultResponse implements JsonConstructable {
-    /** @var Statistics */
-    public $statistics;
-    /** @var Text */
-    public $text;
-    /** @var HTML */
-    public $html;
+    public Statistics $statistics;
+    public Text $text;
+    public HTML $html;
 
-    public static function createFromJsonObject(\stdClass $json){
+    public static function createFromJsonObject(\stdClass $json) : self{
         $self = new static();
         $self->statistics = Statistics::createFromJsonObject($json->statistics);
         $self->text = Text::createFromJsonObject($json->text);

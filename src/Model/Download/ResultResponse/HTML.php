@@ -7,15 +7,13 @@ namespace Kicken\Copyleaks\Model\Download\ResultResponse;
 use Kicken\Copyleaks\Model\JsonConstructable;
 
 class HTML implements JsonConstructable {
-    /** @var string */
-    public $value;
-    /** @var Comparison */
-    public $comparison;
+    public string $value;
+    public Comparison $comparison;
 
-    public static function createFromJsonObject(\stdClass $jsonData){
+    public static function createFromJsonObject(\stdClass $json) : self{
         $self = new static();
-        $self->value = $jsonData->value;
-        $self->comparison = Comparison::createFromJsonObject($jsonData->comparison);
+        $self->value = $json->value;
+        $self->comparison = Comparison::createFromJsonObject($json->comparison);
 
         return $self;
     }

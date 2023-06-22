@@ -8,11 +8,11 @@ use Kicken\Copyleaks\Model\JsonConstructable;
 
 class ComparisonMarkerData implements JsonConstructable {
     /** @var int[] */
-    public $starts;
+    public array $starts;
     /** @var int[] */
-    public $lengths;
+    public array $lengths;
 
-    public static function createFromJsonObject(\stdClass $json){
+    public static function createFromJsonObject(\stdClass $json) : self{
         $self = new static();
         $self->starts = $json->starts;
         $self->lengths = $json->lengths;

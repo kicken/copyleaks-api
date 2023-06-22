@@ -7,12 +7,12 @@ namespace Kicken\Copyleaks\Model\Webhook\Completed;
 use Kicken\Copyleaks\Model\JsonConstructable;
 
 abstract class ResultItem implements JsonConstructable {
-    public $id;
-    public $title;
-    public $introduction;
-    public $matchedWords;
+    public string $id;
+    public string $title;
+    public string $introduction;
+    public int $matchedWords;
 
-    public static function createFromJsonObject(\stdClass $json){
+    public static function createFromJsonObject(\stdClass $json) : self{
         $self = new static();
         $self->id = $json->id;
         $self->title = $json->title;

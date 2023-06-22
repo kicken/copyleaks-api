@@ -7,18 +7,13 @@ namespace Kicken\Copyleaks\Model\Webhook\Completed;
 use Kicken\Copyleaks\Model\JsonConstructable;
 
 class ScannedDocument implements JsonConstructable {
-    /** @var int */
-    public $scanId;
-    /** @var int */
-    public $totalWords;
-    /** @var int */
-    public $totalExcluded;
-    /** @var int */
-    public $credits;
-    /** @var int */
-    public $creationTime;
+    public int $scanId;
+    public int $totalWords;
+    public int $totalExcluded;
+    public int $credits;
+    public \DateTimeInterface $creationTime;
 
-    public static function createFromJsonObject(\stdClass $json){
+    public static function createFromJsonObject(\stdClass $json) : self{
         $self = new self;
         $self->scanId = $json->scanId;
         $self->totalWords = $json->totalWords;

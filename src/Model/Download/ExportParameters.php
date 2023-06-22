@@ -5,12 +5,9 @@ namespace Kicken\Copyleaks\Model\Download;
 
 
 class ExportParameters extends Common implements \JsonSerializable {
-    /** @var string */
-    public $exportId;
-    /** @var string */
-    public $completionHook;
-    /** @var array */
-    public $extraProperties;
+    public string $exportId;
+    public string $completionHook;
+    public array $extraProperties;
 
     public function __construct(string $scanId, string $exportId, string $completionHook, array $extraProperties = []){
         parent::__construct($scanId);
@@ -23,7 +20,7 @@ class ExportParameters extends Common implements \JsonSerializable {
         ], $extraProperties);
     }
 
-    public function result(string $id, string $endpoint, string $verb = 'POST', array $extraProperties = []){
+    public function result(string $id, string $endpoint, string $verb = 'POST', array $extraProperties = []) : void{
         $this->extraProperties['results'][] = array_merge([
             'id' => $id
             , 'endpoint' => $endpoint
@@ -31,21 +28,21 @@ class ExportParameters extends Common implements \JsonSerializable {
         ], $extraProperties);
     }
 
-    public function pdfReport(string $endpoint, string $verb = 'POST', array $extraProperties = []){
+    public function pdfReport(string $endpoint, string $verb = 'POST', array $extraProperties = []) : void{
         $this->extraProperties['pdfReport'] = array_merge([
             'endpoint' => $endpoint
             , 'verb' => $verb
         ], $extraProperties);
     }
 
-    public function crawledVersion(string $endpoint, string $verb = 'POST', array $extraProperties = []){
+    public function crawledVersion(string $endpoint, string $verb = 'POST', array $extraProperties = []) : void{
         $this->extraProperties['crawledVersion'] = array_merge([
             'endpoint' => $endpoint
             , 'verb' => $verb
         ], $extraProperties);
     }
 
-    public function jsonSerialize(){
+    public function jsonSerialize() : array{
         $properties = array_merge([
             'completionWebhook' => $this->completionHook
         ], $this->extraProperties);

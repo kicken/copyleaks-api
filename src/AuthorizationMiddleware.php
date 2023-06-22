@@ -9,10 +9,10 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class AuthorizationMiddleware {
-    private $email;
-    private $apiKey;
-    private $client;
-    private $token = null;
+    private string $email;
+    private string $apiKey;
+    private Client $client;
+    private ?string $token = null;
 
     public function __construct(string $email, string $apiKey, Client $client){
         $this->email = $email;

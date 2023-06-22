@@ -7,14 +7,11 @@ namespace Kicken\Copyleaks\Model\Download\ResultResponse;
 use Kicken\Copyleaks\Model\JsonConstructable;
 
 class Statistics implements JsonConstructable {
-    /** @var int */
-    public $identical;
-    /** @var int */
-    public $minorChanges;
-    /** @var int */
-    public $relatedMeaning;
+    public int $identical;
+    public int $minorChanges;
+    public int $relatedMeaning;
 
-    public static function createFromJsonObject(\stdClass $json){
+    public static function createFromJsonObject(\stdClass $json) : self{
         $self = new static();
         $self->identical = $json->identical;
         $self->minorChanges = $json->minorChanges;

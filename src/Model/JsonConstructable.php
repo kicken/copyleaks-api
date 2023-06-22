@@ -12,5 +12,5 @@ interface JsonConstructable {
      *
      * @return self
      */
-    public static function createFromJsonObject(\stdClass $json);
+    public static function createFromJsonObject(\stdClass $json) : self;
 }

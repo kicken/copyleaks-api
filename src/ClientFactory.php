@@ -13,11 +13,11 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 class ClientFactory implements LoggerAwareInterface {
-    private $client;
-    private $email;
-    private $apiKey;
-    private $clientOptions;
-    private $logger;
+    private ?Client $client;
+    private string $email;
+    private string $apiKey;
+    private array $clientOptions;
+    private LoggerInterface $logger;
 
     public function __construct(string $email, string $apiKey, array $clientOptions){
         $this->email = $email;
@@ -31,7 +31,7 @@ class ClientFactory implements LoggerAwareInterface {
         $this->logger = $logger;
     }
 
-    public function setClientOptions($options){
+    public function setClientOptions(array $options){
         $this->client = null;
         $this->clientOptions = $options;
     }

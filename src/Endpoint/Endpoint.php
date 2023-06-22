@@ -9,15 +9,15 @@ use Kicken\Copyleaks\ClientFactory;
 use Psr\Log\LoggerInterface;
 
 abstract class Endpoint {
-    protected $clientFactory;
-    protected $logger;
+    protected ClientFactory $clientFactory;
+    protected LoggerInterface $logger;
 
     public function __construct(ClientFactory $factory, LoggerInterface $logger){
         $this->clientFactory = $factory;
         $this->logger = $logger;
     }
 
-    abstract protected function getBaseUri();
+    abstract protected function getBaseUri() : string;
 
     protected function sendRequest(string $method, string $endpoint, $bodyData = null) : EndpointResponse{
         try {

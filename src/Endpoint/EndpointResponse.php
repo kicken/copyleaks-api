@@ -7,20 +7,20 @@ namespace Kicken\Copyleaks\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 
 class EndpointResponse {
-    private $response;
+    private ResponseInterface $response;
 
     public function __construct(ResponseInterface $response){
         $this->response = $response;
     }
 
-    public function bodyContent(){
+    public function bodyContent() : string{
         $bodyStream = $this->response->getBody();
         $bodyStream->rewind();
 
         return $bodyStream->getContents();
     }
 
-    public function decodeJson(){
+    public function decodeJson() : \stdClass{
         $contentType = $this->response->getHeaderLine('Content-type');
         [$contentType] = explode(';', $contentType);
         $contentType = strtolower(trim($contentType));

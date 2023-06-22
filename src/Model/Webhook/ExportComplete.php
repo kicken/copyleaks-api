@@ -8,11 +8,11 @@ use Kicken\Copyleaks\Model\JsonConstructable;
 use Kicken\Copyleaks\Model\Webhook\ExportComplete\Task;
 
 class ExportComplete implements JsonConstructable {
-    public $completed;
-    public $tasks;
-    public $developerPayload;
+    public bool $completed;
+    public array $tasks;
+    public string $developerPayload;
 
-    public static function createFromJsonObject(\stdClass $json){
+    public static function createFromJsonObject(\stdClass $json) : self{
         $self = new static();
         $self->completed = $json->completed;
         $self->tasks = array_map(function(\stdClass $json){

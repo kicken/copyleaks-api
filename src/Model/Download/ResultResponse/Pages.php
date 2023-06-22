@@ -8,9 +8,9 @@ use Kicken\Copyleaks\Model\JsonConstructable;
 
 class Pages implements JsonConstructable {
     /** @var int[] */
-    public $startPosition;
+    public array $startPosition;
 
-    public static function createFromJsonObject(\stdClass $json){
+    public static function createFromJsonObject(\stdClass $json) : self{
         $self = new static();
         $self->startPosition = $json->startPosition;
 

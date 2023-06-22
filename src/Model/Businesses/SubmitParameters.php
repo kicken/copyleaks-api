@@ -5,10 +5,8 @@ namespace Kicken\Copyleaks\Model\Businesses;
 
 
 abstract class SubmitParameters implements \JsonSerializable {
-    /** @var string */
-    public $scanId;
-    /** @var array */
-    public $properties;
+    public string $scanId;
+    public array $properties;
 
     protected function __construct(string $scanId, string $statusHook, array $extraProperties){
         if ($statusHook && strpos($statusHook, '{STATUS}') === false){

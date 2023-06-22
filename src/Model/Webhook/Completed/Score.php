@@ -7,16 +7,12 @@ namespace Kicken\Copyleaks\Model\Webhook\Completed;
 use Kicken\Copyleaks\Model\JsonConstructable;
 
 class Score implements JsonConstructable {
-    /** @var int */
-    public $identicalWords;
-    /** @var int */
-    public $minorChangedWords;
-    /** @var int */
-    public $relatedMeaningWords;
-    /** @var int */
-    public $aggregatedScore;
+    public int $identicalWords;
+    public int $minorChangedWords;
+    public int $relatedMeaningWords;
+    public int $aggregatedScore;
 
-    public static function createFromJsonObject(\stdClass $json){
+    public static function createFromJsonObject(\stdClass $json) : self{
         $self = new self;
         $self->identicalWords = $json->identicalWords;
         $self->minorChangedWords = $json->minorChangedWords;

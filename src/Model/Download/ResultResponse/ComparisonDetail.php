@@ -7,14 +7,11 @@ namespace Kicken\Copyleaks\Model\Download\ResultResponse;
 use Kicken\Copyleaks\Model\JsonConstructable;
 
 class ComparisonDetail implements JsonConstructable {
-    /** @var int */
-    public $groupId;
-    /** @var ComparisonMarker */
-    public $source;
-    /** @var ComparisonMarker */
-    public $suspected;
+    public int $groupId;
+    public ComparisonMarker $source;
+    public ComparisonMarker $suspected;
 
-    public static function createFromJsonObject(\stdClass $json){
+    public static function createFromJsonObject(\stdClass $json) : self{
         $self = new static();
         $self->groupId = $json->groupId ?? [];
         $self->source = ComparisonMarker::createFromJsonObject($json->source);
