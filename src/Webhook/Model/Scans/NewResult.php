@@ -7,9 +7,11 @@ use Kicken\Copyleaks\Webhook\Model\Scans\Internal\BatchResultItem;
 use Kicken\Copyleaks\Webhook\Model\Scans\Internal\DatabaseResultItem;
 use Kicken\Copyleaks\Webhook\Model\Scans\Internal\InternetResultItem;
 use Kicken\Copyleaks\Webhook\Model\Scans\Internal\RepositoryResultItem;
+use Kicken\Copyleaks\Webhook\Model\Scans\Internal\Score;
 
 class NewResult implements JsonConstructable {
-    public float $score;
+    //The documentation says this is a float, but testing indicates it is actually an object.
+    public Score $score;
     public string $developerPayload;
     /** @var InternetResultItem[] */
     public array $internet;
@@ -22,7 +24,7 @@ class NewResult implements JsonConstructable {
 
     public static function createFromJsonObject(\stdClass $json) : self{
         $obj = new self;
-        $obj->score = $json->score ?? 0;
+        $obj->score = Score::createFromJsonObject($json->score ?? new \stdClass());
         $obj->developerPayload = $json->developerPayload ?? '';
         $obj->internet = array_map(function(\stdClass $v){
             return InternetResultItem::createFromJsonObject($v);

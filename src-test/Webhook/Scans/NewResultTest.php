@@ -10,84 +10,77 @@ class NewResultTest extends TestCase {
 
     protected function setUp() : void{
         $this->sampleResponse = json_decode(/** @lang JSON */ '{
-  "score": 0,
-  "developerPayload": "string",
+  "score": {
+    "aggregatedScore": 41.5
+  },
+  "developerPayload": "",
   "internet": [
     {
+      "url": "https://example.com/",
       "id": "internet-0",
-      "title": "string",
-      "introduction": "string",
-      "matchedWords": 0,
-      "url": "string",
+      "title": "Example",
+      "introduction": "Example",
+      "matchedWords": 16,
+      "identicalWords": 16,
+      "similarWords": 0,
+      "paraphrasedWords": 0,
+      "totalWords": 737,
       "metadata": {
-        "finalUrl": "string",
-        "canonicalUrl": "string",
-        "author": "string",
-        "organization": "string",
-        "filename": "string",
-        "publishDate": "2023-06-23",
-        "creationDate": "2023-06-23",
-        "lastModificationDate": "2023-06-23"
-      }
+        "filename": "source"
+      },
+      "tags": []
     }
   ],
   "database": [
     {
       "id": "database-0",
-      "title": "string",
-      "introduction": "string",
-      "matchedWords": 0,
+      "title": "Example",
+      "introduction": "Example",
       "scanId": "string",
+      "matchedWords": 16,
+      "identicalWords": 16,
+      "similarWords": 0,
+      "paraphrasedWords": 0,
+      "totalWords": 737,
       "metadata": {
-        "finalUrl": "string",
-        "canonicalUrl": "string",
-        "author": "string",
-        "organization": "string",
-        "filename": "string",
-        "publishDate": "2023-06-23",
-        "creationDate": "2023-06-23",
-        "lastModificationDate": "2023-06-23"
-      }
+        "filename": "source"
+      },
+      "tags": []
     }
   ],
   "batch": [
     {
       "id": "batch-0",
-      "title": "string",
-      "introduction": "string",
-      "matchedWords": 0,
+      "title": "Example",
+      "introduction": "Example",
       "scanId": "string",
+      "matchedWords": 16,
+      "identicalWords": 16,
+      "similarWords": 0,
+      "paraphrasedWords": 0,
+      "totalWords": 737,
       "metadata": {
-        "finalUrl": "string",
-        "canonicalUrl": "string",
-        "author": "string",
-        "organization": "string",
-        "filename": "string",
-        "publishDate": "2023-06-23",
-        "creationDate": "2023-06-23",
-        "lastModificationDate": "2023-06-23"
-      }
+        "filename": "source"
+      },
+      "tags": [ ]
     }
   ],
   "repositories": [
     {
       "id": "repositories-0",
-      "title": "string",
-      "introduction": "string",
-      "matchedWords": 0,
-      "repositoryId": "string",
+      "title": "Example",
+      "introduction": "Example",
+      "repositoryId": "12345",
       "scanId": "string",
+      "matchedWords": 16,
+      "identicalWords": 16,
+      "similarWords": 0,
+      "paraphrasedWords": 0,
+      "totalWords": 737,
       "metadata": {
-        "finalUrl": "string",
-        "canonicalUrl": "string",
-        "author": "string",
-        "organization": "string",
-        "filename": "string",
-        "publishDate": "2023-06-23",
-        "creationDate": "2023-06-23",
-        "lastModificationDate": "2023-06-23",
-        "submittedBy": "string"
-      }
+        "filename": "source"
+      },
+      "tags": []
     }
   ]
 }');
@@ -95,7 +88,7 @@ class NewResultTest extends TestCase {
 
     public function testResponseIsParsedSuccessfully(){
         $result = NewResult::createFromJsonObject($this->sampleResponse);
-        $this->assertEquals($this->sampleResponse->score, $result->score);
+        $this->assertEquals($this->sampleResponse->score->aggregatedScore, $result->score->aggregatedScore);
         $this->assertEquals($this->sampleResponse->developerPayload, $result->developerPayload);
         $this->assertCount(count($this->sampleResponse->internet), $result->internet);
         $this->assertEquals($this->sampleResponse->internet[0]->id, $result->internet[0]->id);

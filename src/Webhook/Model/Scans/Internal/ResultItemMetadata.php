@@ -24,9 +24,9 @@ class ResultItemMetadata implements JsonConstructable {
     protected static function setStandardProperties(\stdClass $json, ResultItemMetadata $obj) : void{
         $obj->finalUrl = $json->finalUrl ?? '';
         $obj->canonicalUrl = $json->canonicalUrl ?? '';
-        $obj->publishDate = $json->publishDate ? new \DateTimeImmutable($json->publishDate) : null;
-        $obj->creationDate = $json->creationDate ? new \DateTimeImmutable($json->creationDate) : null;
-        $obj->lastModificationDate = $json->lastModificationDate ? new \DateTimeImmutable($json->lastModificationDate) : null;
+        $obj->publishDate = isset($json->publishDate) ? new \DateTimeImmutable($json->publishDate) : null;
+        $obj->creationDate = isset($json->creationDate) ? new \DateTimeImmutable($json->creationDate) : null;
+        $obj->lastModificationDate = isset($json->lastModificationDate) ? new \DateTimeImmutable($json->lastModificationDate) : null;
         $obj->author = $json->author ?? '';
         $obj->organization = $json->organization ?? '';
         $obj->filename = $json->filename ?? '';

@@ -12,7 +12,7 @@ class ErrorTest extends TestCase {
         $this->sampleResponse = json_decode(/** @lang JSON */ '{
   "status": 1,
   "error": {
-    "message": "You don\'t have enough credits to complete the request (required 10 credits)!",
+    "message": "You do not have enough credits to complete the request (required 10 credits)!",
     "code": "13"
   },
   "developerPayload": "Custom developer payload"

@@ -18,9 +18,9 @@ class Excludes implements JsonConstructable {
 
     public static function createFromJsonObject(\stdClass $json) : self{
         $self = new static();
-        $self->starts = $json->starts;
-        $self->lengths = $json->lengths;
-        $self->reasons = $json->reasons;
+        $self->starts = $json->starts ?? [];
+        $self->lengths = $json->lengths ?? [];
+        $self->reasons = $json->reasons ?? [];
         $self->groupIds = $json->groupIds ?? null;
 
         return $self;

@@ -13,8 +13,8 @@ class CrawledVersionContent implements JsonConstructable {
 
     public static function createFromJsonObject(\stdClass $json) : self{
         $self = new static();
-        $self->value = $json->value;
-        $self->exclude = Excludes::createFromJsonObject($json->exclude);
+        $self->value = $json->value ?? '';
+        $self->exclude = Excludes::createFromJsonObject($json->exclude ?? new \stdClass());
         $self->pages = isset($json->pages) ? Pages::createFromJsonObject($json->pages) : null;
 
         return $self;
