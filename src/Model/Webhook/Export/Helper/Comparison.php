@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Kicken\Copyleaks\Model\Download\ResultResponse;
+namespace Kicken\Copyleaks\Model\Webhook\Export\Helper;
 
 
 use Kicken\Copyleaks\Model\JsonConstructable;

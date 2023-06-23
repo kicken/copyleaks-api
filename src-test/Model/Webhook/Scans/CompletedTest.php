@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 class CompletedTest extends TestCase {
     private \stdClass $sampleResponse;
 
-    public function setUp() : void{
+    protected function setUp() : void{
         $this->sampleResponse = json_decode(/** @lang JSON */ '{
   "status": 0,
   "developerPayload": "Custom developer payload",

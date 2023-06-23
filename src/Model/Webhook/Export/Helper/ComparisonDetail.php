@@ -1,13 +1,14 @@
 <?php
 
 
-namespace Kicken\Copyleaks\Model\Download\ResultResponse;
+namespace Kicken\Copyleaks\Model\Webhook\Export\Helper;
 
 
 use Kicken\Copyleaks\Model\JsonConstructable;
 
 class ComparisonDetail implements JsonConstructable {
-    public int $groupId;
+    /** @var int[] */
+    public array $groupId;
     public ComparisonMarker $source;
     public ComparisonMarker $suspected;
 
