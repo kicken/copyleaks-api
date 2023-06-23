@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Kicken\Copyleaks\Model\Webhook\Completed;
+namespace Kicken\Copyleaks\Model\Webhook\Scans\Helpers;
 
 
 use Kicken\Copyleaks\Model\JsonConstructable;
