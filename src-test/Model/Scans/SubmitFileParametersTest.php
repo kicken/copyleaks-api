@@ -2,17 +2,19 @@
 
 namespace Kicken\Copyleaks\Test\Model\Scans;
 
-use Kicken\Copyleaks\Model\Scans\SubmitUrlParameters;
+use Kicken\Copyleaks\Model\Scans\SubmitFileParameters;
 use PHPUnit\Framework\TestCase;
 
-class SubmitUrlParametersTest extends TestCase {
-    private const URL = 'https://example.com';
+class SubmitFileParametersTest extends TestCase {
+    private const CONTENT = 'example file content';
+    private const FILENAME = 'https://example.com';
     private const SCAN_ID = 'example';
     private const STATUS_HOOK = 'https://example.com/{STATUS}';
 
     public function testConstructorSetsProperties(){
         $params = $this->createParameters();
-        $this->assertEquals(self::URL, $params->url);
+        $this->assertEquals(self::CONTENT, $params->base64);
+        $this->assertEquals(self::FILENAME, $params->filename);
         $this->assertEquals(self::SCAN_ID, $params->scanId);
         $this->assertEquals(self::STATUS_HOOK, $params->properties->webhooks->status);
     }
@@ -27,7 +29,7 @@ class SubmitUrlParametersTest extends TestCase {
         $this->createParameters('https://example.com/{status}');
     }
 
-    private function createParameters(string $statusHook = self::STATUS_HOOK) : SubmitUrlParameters{
-        return new SubmitUrlParameters(self::URL, self::SCAN_ID, $statusHook);
+    private function createParameters(string $statusHook = self::STATUS_HOOK) : SubmitFileParameters{
+        return new SubmitFileParameters(self::CONTENT, self::FILENAME, self::SCAN_ID, $statusHook);
     }
 }

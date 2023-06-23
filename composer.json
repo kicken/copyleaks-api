@@ -23,7 +23,6 @@
   "require": {
     "php": ">=7.4",
     "ext-json": "*",
-    "ext-dom": "*",
     "psr/log": "^1.0",
     "guzzlehttp/guzzle": "^6.5"
   },
