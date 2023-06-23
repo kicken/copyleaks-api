@@ -1,6 +1,6 @@
 # Copyleaks API v3 Implementation
 
-This is a simple [Copyleaks API version 3](https://api.copyleaks.com/documentation/v3) implementation. 
+This is a simple [Copyleaks API version 3](https://api.copyleaks.com/documentation/v3) implementation.
 
 ## Install
 
@@ -10,9 +10,10 @@ The easiest way to install this is to use composer.
 
 ## Usage
 
-First create a new instance of the **CopyleaksAPI** class.  Then you can use the *education()*, *business()*, and *download()* methods to access the api endpoints. 
+First create a new instance of the **CopyleaksAPI** class. Then you can use the *scans()* and *downloads()* methods to access the api
+endpoints.
 
-Here are quick examples to help you get going.  Read the library source for more details about features and how to use the library.
+Here are quick examples to help you get going. Read the library source for more details about features and how to use the library.
 
 **Submit a document for scanning using a URL.**
 
@@ -28,7 +29,7 @@ Here are quick examples to help you get going.  Read the library source for more
 
     //Submit scan request
     $parameters = new SubmitUrlParameters($documentUrl, $scanId, $statusUrl);
-    $client->education()->submitURL($parameters);
+    $client->scans()->submitURL($parameters);
 
 **Export results when complete**
 
@@ -53,20 +54,20 @@ Here are quick examples to help you get going.  Read the library source for more
     foreach ($matchMap as $type => $matchList){
         /** @var ResultItem $resultItem */
         foreach ($matchList as $resultItem){
-            $resultHook = 'https://example.com/webhook.php?' . http_build_query([
+            $resultParams = new ResultParameters($resultItem->id, 'https://example.com/webhook.php?' . http_build_query([
                     'scan' => $scanId,
                     'action' => 'export',
                     'what' => 'result',
                     'id' => $resultItem->id
-                ]);
-            $exportParameters->result($resultItem->id, $resultHook);
+                ])); 
+            $exportParameters->addResult($resultParams);
         }
     }
 
     $client = new CopyleaksAPI(API_EMAIL, API_KEY);
-    $client->download()->export($exportParameters);
+    $client->downloads()->export($exportParameters);
 
 ## Known issues
-I've only implemented the API endpoints that are necessary for my use case so far.
 
-There is currently no automated testing for this library.
+Not all endpoints and model properties are implemented yet.
+
