@@ -2,9 +2,9 @@
 
 namespace Kicken\Copyleaks\Endpoint;
 
-use Kicken\Copyleaks\Model\Scans\SubmitFileParameters;
-use Kicken\Copyleaks\Model\Scans\SubmitOCRParameters;
-use Kicken\Copyleaks\Model\Scans\SubmitUrlParameters;
+use Kicken\Copyleaks\Endpoint\Model\SubmitFileParameters;
+use Kicken\Copyleaks\Endpoint\Model\SubmitOCRParameters;
+use Kicken\Copyleaks\Endpoint\Model\SubmitUrlParameters;
 
 class Scans extends Endpoint {
     public function submitURL(SubmitUrlParameters $parameters) : void{

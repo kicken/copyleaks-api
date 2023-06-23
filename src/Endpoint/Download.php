@@ -4,7 +4,7 @@
 namespace Kicken\Copyleaks\Endpoint;
 
 
-use Kicken\Copyleaks\Model\Download\ExportParameters;
+use Kicken\Copyleaks\Endpoint\Model\ExportParameters;
 
 class Download extends Endpoint {
     public function export(ExportParameters $parameters) : void{

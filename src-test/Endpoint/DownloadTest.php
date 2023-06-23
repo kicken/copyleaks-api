@@ -7,7 +7,7 @@ use GuzzleHttp\Psr7\Stream;
 use Kicken\Copyleaks\ClientFactory;
 use Kicken\Copyleaks\Endpoint\Download;
 use Kicken\Copyleaks\Endpoint\EndpointException;
-use Kicken\Copyleaks\Model\Download\ExportParameters;
+use Kicken\Copyleaks\Endpoint\Model\ExportParameters;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\NullLogger;
