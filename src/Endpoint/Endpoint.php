@@ -5,6 +5,7 @@ namespace Kicken\Copyleaks\Endpoint;
 
 
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\RequestOptions;
 use Kicken\Copyleaks\ClientFactory;
 use Kicken\Copyleaks\Model\ModelSerializer;
 use Psr\Log\LoggerInterface;
@@ -37,7 +38,8 @@ abstract class Endpoint {
                 'base_uri' => $this->getBaseUri()
             ];
             if ($bodyData){
-                $options['json'] = $this->serializer->serialize($bodyData);
+                $options[RequestOptions::HEADERS]['Content-type'] = 'application/json';
+                $options[RequestOptions::BODY] = $this->serializer->serialize($bodyData);
             }
 
             $response = $this->clientFactory->getClient()->request($method, $endpoint, $options);

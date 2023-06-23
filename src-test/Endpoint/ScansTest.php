@@ -33,10 +33,10 @@ class ScansTest extends TestCase {
         $requestMethod = $this->mockClient->method('request');
 
         $requestMethod->willReturn($this->createMockResponse(201, 'Created'));
-        $requestMethod->with('PUT', 'v3/scans/submit/url/' . $scanId, $this->callback(function($value) use ($documentUrl, $scanId){
+        $requestMethod->with('PUT', 'v3/scans/submit/url/' . $scanId, $this->callback(function($value) use ($documentUrl){
             $bodyData = $this->parseRequestBodyJson($value);
 
-            return $bodyData->url === $documentUrl && $bodyData->scanId === $scanId;
+            return $bodyData->url === $documentUrl;
         }));
 
         $this->endpoint->submitURL($parameters);
@@ -51,10 +51,10 @@ class ScansTest extends TestCase {
         $requestMethod = $this->mockClient->method('request');
 
         $requestMethod->willReturn($this->createMockResponse(201, 'Created'));
-        $requestMethod->with('PUT', 'v3/scans/submit/file/' . $scanId, $this->callback(function($value) use ($fileContent, $filename, $scanId){
+        $requestMethod->with('PUT', 'v3/scans/submit/file/' . $scanId, $this->callback(function($value) use ($fileContent, $filename){
             $bodyData = $this->parseRequestBodyJson($value);
 
-            return $bodyData->base64 === $fileContent && $bodyData->filename === $filename && $bodyData->scanId === $scanId;
+            return $bodyData->base64 === $fileContent && $bodyData->filename === $filename;
         }));
 
         $this->endpoint->submitFile($parameters);
@@ -70,10 +70,10 @@ class ScansTest extends TestCase {
         $requestMethod = $this->mockClient->method('request');
 
         $requestMethod->willReturn($this->createMockResponse(201, 'Created'));
-        $requestMethod->with('PUT', 'v3/scans/submit/ocr/' . $scanId, $this->callback(function($value) use ($filename, $fileContent, $scanId, $langCode){
+        $requestMethod->with('PUT', 'v3/scans/submit/ocr/' . $scanId, $this->callback(function($value) use ($filename, $fileContent, $langCode){
             $bodyData = $this->parseRequestBodyJson($value);
 
-            return $bodyData->base64 === $fileContent && $bodyData->filename === $filename && $bodyData->langCode === $langCode && $bodyData->scanId === $scanId;
+            return $bodyData->base64 === $fileContent && $bodyData->filename === $filename && $bodyData->langCode === $langCode;
         }));
 
         $this->endpoint->submitOCR($parameters);
@@ -119,11 +119,11 @@ class ScansTest extends TestCase {
     }
 
     private function parseRequestBodyJson($requestOptions){
-        if (!is_array($requestOptions) || !array_key_exists('json', $requestOptions)){
+        if (!is_array($requestOptions) || !array_key_exists('body', $requestOptions)){
             throw new \RuntimeException('Invalid request options type');
         }
 
-        $data = json_decode($requestOptions['json']);
+        $data = json_decode($requestOptions['body']);
         if (json_last_error() !== JSON_ERROR_NONE){
             throw new \RuntimeException(json_last_error_msg());
         }

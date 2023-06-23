@@ -63,11 +63,11 @@ class DownloadTest extends TestCase {
     }
 
     private function parseRequestBodyJson($requestOptions) : \stdClass{
-        if (!is_array($requestOptions) || !array_key_exists('json', $requestOptions)){
+        if (!is_array($requestOptions) || !array_key_exists('body', $requestOptions)){
             throw new \RuntimeException('Invalid request options type');
         }
 
-        $data = json_decode($requestOptions['json']);
+        $data = json_decode($requestOptions['body']);
         if (json_last_error() !== JSON_ERROR_NONE){
             throw new \RuntimeException(json_last_error_msg());
         }

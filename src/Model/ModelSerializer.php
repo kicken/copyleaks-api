@@ -19,8 +19,14 @@ class ModelSerializer {
         } else {
             $result = new \stdClass();
             $setProperties = false;
+            if ($value instanceof SerializerExclusions){
+                $excludedProperties = $value->getExcludedPropertyNames();
+            } else {
+                $excludedProperties = [];
+            }
+
             foreach (get_object_vars($value) as $name => $value){
-                if ($value === null){
+                if ($value === null || in_array($name, $excludedProperties)){
                     continue;
                 } else {
                     $value = $this->serializeValue($value);

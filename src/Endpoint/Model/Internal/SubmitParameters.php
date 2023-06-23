@@ -4,7 +4,9 @@
 namespace Kicken\Copyleaks\Endpoint\Model\Internal;
 
 
-abstract class SubmitParameters {
+use Kicken\Copyleaks\Model\SerializerExclusions;
+
+abstract class SubmitParameters implements SerializerExclusions {
     public string $scanId;
     public Properties $properties;
 
@@ -16,5 +18,9 @@ abstract class SubmitParameters {
         $this->scanId = $scanId;
         $this->properties = $extraProperties ?? new Properties();
         $this->properties->webhooks->status = $statusHook;
+    }
+
+    public function getExcludedPropertyNames() : array{
+        return ['scanId'];
     }
 }

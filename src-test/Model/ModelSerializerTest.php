@@ -82,5 +82,4 @@ class ModelSerializerTest extends TestCase {
         $serialized = $this->serializer->serialize($model);
         $this->assertEquals($expected, $serialized);
     }
-
 }

@@ -3,6 +3,7 @@
 namespace Kicken\Copyleaks\Test\Endpoint\Model\Scans;
 
 use Kicken\Copyleaks\Endpoint\Model\SubmitUrlParameters;
+use Kicken\Copyleaks\Model\ModelSerializer;
 use PHPUnit\Framework\TestCase;
 
 class SubmitUrlParametersTest extends TestCase {
@@ -25,6 +26,22 @@ class SubmitUrlParametersTest extends TestCase {
     public function testStatusHookPlaceholderIsCaseSensitive(){
         $this->expectException(\InvalidArgumentException::class);
         $this->createParameters('https://example.com/{status}');
+    }
+
+    public function testSerializesUrlProperly(){
+        $params = $this->createParameters();
+        $serializer = new ModelSerializer();
+
+        $json = $serializer->serialize($params);
+        $expectedJson = json_encode([
+            'url' => self::URL,
+            'properties' => [
+                'webhooks' => [
+                    'status' => $params->properties->webhooks->status
+                ]
+            ]
+        ]);
+        $this->assertEquals($expectedJson, $json);
     }
 
     private function createParameters(string $statusHook = self::STATUS_HOOK) : SubmitUrlParameters{
