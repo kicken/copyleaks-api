@@ -4,6 +4,8 @@
 namespace Kicken\Copyleaks;
 
 
+use Kicken\Copyleaks\Endpoint\Download;
+use Kicken\Copyleaks\Endpoint\Endpoint;
 use Kicken\Copyleaks\Endpoint\Scans;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -25,5 +27,9 @@ class CopyleaksAPI implements LoggerAwareInterface {
 
     public function scans() : Scans{
         return new Scans($this->factory, $this->logger);
+    }
+
+    public function downloads() : Endpoint{
+        return new Download($this->factory, $this->logger);
     }
 }

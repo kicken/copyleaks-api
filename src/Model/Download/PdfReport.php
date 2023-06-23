@@ -1,12 +1,10 @@
 <?php
 
-
 namespace Kicken\Copyleaks\Model\Download;
 
-
-class ResultParameters {
-    public ?string $id = null;
+class PdfReport {
     public ?string $endpoint = null;
     public ?string $verb = null;
+    /** @var string[] */
     public ?array $headers = null;
 }

@@ -1,12 +1,9 @@
 <?php
 
-
 namespace Kicken\Copyleaks\Model\Download;
 
-
-class ResultParameters {
-    public ?string $id = null;
-    public ?string $endpoint = null;
+class CrawledVersion {
     public ?string $verb = null;
+    /** @var string[] */
     public ?array $headers = null;
 }
