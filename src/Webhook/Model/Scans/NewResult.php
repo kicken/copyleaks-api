@@ -20,7 +20,7 @@ class NewResult implements JsonConstructable {
     /** @var RepositoryResultItem[] */
     public array $repositories;
 
-    public static function createFromJsonObject(\stdClass $json) : JsonConstructable{
+    public static function createFromJsonObject(\stdClass $json) : self{
         $obj = new self;
         $obj->score = $json->score ?? 0;
         $obj->developerPayload = $json->developerPayload ?? '';
