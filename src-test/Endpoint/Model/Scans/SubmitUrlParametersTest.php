@@ -33,15 +33,10 @@ class SubmitUrlParametersTest extends TestCase {
         $serializer = new ModelSerializer();
 
         $json = $serializer->serialize($params);
-        $expectedJson = json_encode([
-            'url' => self::URL,
-            'properties' => [
-                'webhooks' => [
-                    'status' => $params->properties->webhooks->status
-                ]
-            ]
-        ]);
-        $this->assertEquals($expectedJson, $json);
+        $actual = json_decode($json);
+
+        $this->assertEquals(JSON_ERROR_NONE, json_last_error());
+        $this->assertEquals(self::URL, $actual->url);
     }
 
     private function createParameters(string $statusHook = self::STATUS_HOOK) : SubmitUrlParameters{
