@@ -18,12 +18,14 @@ class ClientFactory implements LoggerAwareInterface {
     private string $apiKey;
     private array $clientOptions;
     private LoggerInterface $logger;
+    private AuthorizationCache $authCache;
 
-    public function __construct(string $email, string $apiKey, array $clientOptions){
+    public function __construct(string $email, string $apiKey, array $clientOptions, AuthorizationCache $authCache = null){
         $this->email = $email;
         $this->apiKey = $apiKey;
         $this->logger = new NullLogger();
         $this->setClientOptions($clientOptions);
+        $this->authCache = $authCache ?? new InMemoryAuthorizationCache();
     }
 
     public function setLogger(LoggerInterface $logger){
@@ -49,7 +51,7 @@ class ClientFactory implements LoggerAwareInterface {
 
         $this->client = new Client($options);
         $stack->push(Middleware::log($this->logger, new MessageFormatter(MessageFormatter::DEBUG)));
-        $stack->push(new AuthorizationMiddleware($this->email, $this->apiKey, $this->client, $this->logger));
+        $stack->push(new AuthorizationMiddleware($this->email, $this->apiKey, $this->client, $this->logger, $this->authCache));
 
 
         return $this->client;

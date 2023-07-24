@@ -14,9 +14,9 @@ class CopyleaksAPI implements LoggerAwareInterface {
     private ClientFactory $factory;
     private LoggerInterface $logger;
 
-    public function __construct(string $email, string $apiKey, array $clientOptions = []){
-        $this->factory = new ClientFactory($email, $apiKey, $clientOptions);
-        $this->logger = new NullLogger();
+    public function __construct(string $email, string $apiKey, array $clientOptions = [], AuthorizationCache $authorizationCache = null){
+        $this->factory = new ClientFactory($email, $apiKey, $clientOptions, $authorizationCache);
+        $this->setLogger(new NullLogger());
     }
 
     public function setLogger(LoggerInterface $logger){

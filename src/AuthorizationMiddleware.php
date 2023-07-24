@@ -3,6 +3,7 @@
 namespace Kicken\Copyleaks;
 
 use GuzzleHttp\Client;
+use Kicken\Copyleaks\Account\AccessToken;
 use Kicken\Copyleaks\Endpoint\EndpointException;
 use Kicken\Copyleaks\Endpoint\EndpointResponse;
 use Psr\Http\Message\RequestInterface;
@@ -13,14 +14,15 @@ class AuthorizationMiddleware {
     private string $email;
     private string $apiKey;
     private Client $client;
-    private ?string $token = null;
+    private AuthorizationCache $authCache;
     private LoggerInterface $logger;
 
-    public function __construct(string $email, string $apiKey, Client $client, LoggerInterface $logger){
+    public function __construct(string $email, string $apiKey, Client $client, LoggerInterface $logger, AuthorizationCache $authCache){
         $this->email = $email;
         $this->apiKey = $apiKey;
         $this->client = $client;
         $this->logger = $logger;
+        $this->authCache = $authCache;
     }
 
     public function __invoke(callable $next) : \Closure{
@@ -29,18 +31,22 @@ class AuthorizationMiddleware {
                 return $next($request, $options);
             }
 
-            if (!$this->token){
+
+            $token = $this->authCache->getToken();
+            if (!$token || $token->isExpired()){
                 $this->logger->notice('Fetching authorization token');
-                $this->token = $this->fetchAuthenticationToken();
+                $token = $this->fetchAuthenticationToken();
+                $this->authCache->updateToken($token);
             }
 
-            return $next($this->addAuth($request), $options)->then(function(ResponseInterface $response) use ($next, $request, $options){
+            return $next($this->addAuth($request, $token->accessToken), $options)->then(function(ResponseInterface $response) use ($next, $request, $options){
                 $status = $response->getStatusCode();
                 if ($status === 401){
                     $this->logger->notice('Renewing authorization token.');
-                    $this->token = $this->fetchAuthenticationToken();
+                    $token = $this->fetchAuthenticationToken();
+                    $this->authCache->updateToken($token);
 
-                    return $next($this->addAuth($request), $options);
+                    return $next($this->addAuth($request, $token->accessToken), $options);
                 } else {
                     return $response;
                 }
@@ -48,11 +54,11 @@ class AuthorizationMiddleware {
         };
     }
 
-    private function addAuth(RequestInterface $request) : RequestInterface{
-        return $request->withHeader('Authorization', 'Bearer ' . $this->token);
+    private function addAuth(RequestInterface $request, string $token) : RequestInterface{
+        return $request->withHeader('Authorization', 'Bearer ' . $token);
     }
 
-    private function fetchAuthenticationToken() : string{
+    private function fetchAuthenticationToken() : AccessToken{
         $response = $this->client->post('https://id.copyleaks.com/v3/account/login/api', [
             'body' => json_encode(['email' => $this->email, 'key' => $this->apiKey])
             , 'headers' => [
@@ -65,8 +71,7 @@ class AuthorizationMiddleware {
         }
 
         $response = new EndpointResponse($response, $this->logger);
-        $data = $response->decodeJson();
 
-        return $data->access_token;
+        return new AccessToken($response->decodeJson());
     }
 }
