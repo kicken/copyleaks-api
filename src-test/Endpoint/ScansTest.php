@@ -3,23 +3,24 @@
 namespace Kicken\Copyleaks\Test\Endpoint;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Stream;
 use Kicken\Copyleaks\ClientFactory;
 use Kicken\Copyleaks\Endpoint\EndpointException;
 use Kicken\Copyleaks\Endpoint\Model\SubmitFileParameters;
 use Kicken\Copyleaks\Endpoint\Model\SubmitOCRParameters;
 use Kicken\Copyleaks\Endpoint\Model\SubmitUrlParameters;
 use Kicken\Copyleaks\Endpoint\Scans;
+use Kicken\Copyleaks\Test\MockResponseBuilder;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Log\NullLogger;
 
 class ScansTest extends TestCase {
     private Client $mockClient;
     private Scans $endpoint;
+    private MockResponseBuilder $mockResponseBuilder;
 
     public function setUp() : void{
         $this->mockClient = $this->getMockBuilder(Client::class)->getMock();
+        $this->mockResponseBuilder = new MockResponseBuilder($this);
         $factory = $this->getMockBuilder(ClientFactory::class)->disableOriginalConstructor()->getMock();
         $factory->method('getClient')->willReturn($this->mockClient);
         $this->endpoint = new Scans($factory, new NullLogger());
@@ -32,7 +33,7 @@ class ScansTest extends TestCase {
         $parameters = new SubmitUrlParameters($documentUrl, $scanId, 'https://example.com/{STATUS}');
         $requestMethod = $this->mockClient->method('request');
 
-        $requestMethod->willReturn($this->createMockResponse(201, 'Created'));
+        $requestMethod->willReturn($this->mockResponseBuilder->createMockResponse(201, 'Created'));
         $requestMethod->with('PUT', 'v3/scans/submit/url/' . $scanId, $this->callback(function($value) use ($documentUrl){
             $bodyData = $this->parseRequestBodyJson($value);
 
@@ -50,7 +51,7 @@ class ScansTest extends TestCase {
         $parameters = new SubmitFileParameters($fileContent, $filename, $scanId, 'https://example.com/{STATUS}');
         $requestMethod = $this->mockClient->method('request');
 
-        $requestMethod->willReturn($this->createMockResponse(201, 'Created'));
+        $requestMethod->willReturn($this->mockResponseBuilder->createMockResponse(201, 'Created'));
         $requestMethod->with('PUT', 'v3/scans/submit/file/' . $scanId, $this->callback(function($value) use ($fileContent, $filename){
             $bodyData = $this->parseRequestBodyJson($value);
 
@@ -69,7 +70,7 @@ class ScansTest extends TestCase {
         $parameters = new SubmitOCRParameters($fileContent, $filename, $langCode, $scanId, 'https://example.com/{STATUS}');
         $requestMethod = $this->mockClient->method('request');
 
-        $requestMethod->willReturn($this->createMockResponse(201, 'Created'));
+        $requestMethod->willReturn($this->mockResponseBuilder->createMockResponse(201, 'Created'));
         $requestMethod->with('PUT', 'v3/scans/submit/ocr/' . $scanId, $this->callback(function($value) use ($filename, $fileContent, $langCode){
             $bodyData = $this->parseRequestBodyJson($value);
 
@@ -86,7 +87,7 @@ class ScansTest extends TestCase {
         $parameters = new SubmitUrlParameters($documentUrl, $scanId, 'https://example.com/{STATUS}');
 
         $requestMethod = $this->mockClient->method('request');
-        $requestMethod->willReturn($this->createMockResponse(400, 'Bad Request'));
+        $requestMethod->willReturn($this->mockResponseBuilder->createMockResponse(400, 'Bad Request'));
         $this->endpoint->submitURL($parameters);
     }
 
@@ -102,20 +103,9 @@ class ScansTest extends TestCase {
 
             return $bodyData->properties->sandbox === true;
         }));
-        $requestMethod->willReturn($this->createMockResponse(201, 'Created'));
+        $requestMethod->willReturn($this->mockResponseBuilder->createMockResponse(201, 'Created'));
         $this->endpoint->enableSandboxMode();
         $this->endpoint->submitURL($parameters);
-    }
-
-    private function createMockResponse(int $code, string $phrase) : ResponseInterface{
-        $fp = fopen('php://memory', 'r+');
-
-        $mockResponse = $this->getMockBuilder(ResponseInterface::class)->getMock();
-        $mockResponse->method('getStatusCode')->willReturn($code);
-        $mockResponse->method('getReasonPhrase')->willReturn($phrase);
-        $mockResponse->method('getBody')->willReturn(new Stream($fp));
-
-        return $mockResponse;
     }
 
     private function parseRequestBodyJson($requestOptions){

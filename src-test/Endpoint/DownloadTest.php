@@ -3,20 +3,21 @@
 namespace Kicken\Copyleaks\Test\Endpoint;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Stream;
 use Kicken\Copyleaks\ClientFactory;
 use Kicken\Copyleaks\Endpoint\Download;
 use Kicken\Copyleaks\Endpoint\EndpointException;
 use Kicken\Copyleaks\Endpoint\Model\ExportParameters;
+use Kicken\Copyleaks\Test\MockResponseBuilder;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Log\NullLogger;
 
 class DownloadTest extends TestCase {
     private Client $mockClient;
     private Download $endpoint;
+    private MockResponseBuilder $mockResponseBuilder;
 
     public function setUp() : void{
+        $this->mockResponseBuilder = new MockResponseBuilder($this);
         $this->mockClient = $this->getMockBuilder(Client::class)->getMock();
         $factory = $this->getMockBuilder(ClientFactory::class)->disableOriginalConstructor()->getMock();
         $factory->method('getClient')->willReturn($this->mockClient);
@@ -36,7 +37,7 @@ class DownloadTest extends TestCase {
 
                 return $data->completionWebhook === $params->completionWebhook;
             })
-        )->willReturn($this->createMockResponse(204, 'No content'));
+        )->willReturn($this->mockResponseBuilder->createMockResponse(204, 'No content'));
         $this->endpoint->export($params);
     }
 
@@ -47,19 +48,8 @@ class DownloadTest extends TestCase {
         $this->mockClient->method('request')->with(
             'POST',
             sprintf('v3/downloads/%s/export/%s', $params->scanId, $params->exportId)
-        )->willReturn($this->createMockResponse(404, 'Not found'));
+        )->willReturn($this->mockResponseBuilder->createMockResponse(404, 'Not found'));
         $this->endpoint->export($params);
-    }
-
-    private function createMockResponse(int $code, string $phrase) : ResponseInterface{
-        $fp = fopen('php://memory', 'r+');
-
-        $mockResponse = $this->getMockBuilder(ResponseInterface::class)->getMock();
-        $mockResponse->method('getStatusCode')->willReturn($code);
-        $mockResponse->method('getReasonPhrase')->willReturn($phrase);
-        $mockResponse->method('getBody')->willReturn(new Stream($fp));
-
-        return $mockResponse;
     }
 
     private function parseRequestBodyJson($requestOptions) : \stdClass{
