@@ -67,6 +67,13 @@ Here are quick examples to help you get going. Read the library source for more 
     $client = new CopyleaksAPI(API_EMAIL, API_KEY);
     $client->downloads()->export($exportParameters);
 
+## Login token caching
+
+Copyleaks recommends caching and re-using the provided authorization token as it is valid for 48-hours. This library by default will cache
+the token in memory. To cache the token elsewhere (such as to persistent storage) you can provide a custom implementation of the
+AuthorizationCache interface.
+
+
 ## Known issues
 
 Not all endpoints and model properties are implemented yet.
