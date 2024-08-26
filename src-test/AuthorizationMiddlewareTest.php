@@ -22,7 +22,7 @@ class AuthorizationMiddlewareTest extends TestCase {
 
     protected function setUp() : void{
         $this->mockResponseBuilder = new MockResponseBuilder($this);
-        $this->mockClient = $this->getMockBuilder(Client::class)->addMethods(['post'])->getMock();
+        $this->mockClient = $this->getMockBuilder(Client::class)->getMock();
         $this->mockCache = $this->getMockBuilder(AuthorizationCache::class)->getMock();
         $this->middleware = new AuthorizationMiddleware('test@example.com', 'test', $this->mockClient, new NullLogger(), $this->mockCache);
         $this->mockAuthResponse = $this->mockResponseBuilder->createMockResponse(200, 'Ok', json_encode([
