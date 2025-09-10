@@ -6,7 +6,7 @@ namespace Kicken\Copyleaks\Model;
 
 interface JsonConstructable {
     /**
-     * Construct a new instance from data in a json object.
+     * Construct a new instance from data in a JSON object.
      *
      * @param \stdClass $json
      *

@@ -28,7 +28,7 @@ class ClientFactory implements LoggerAwareInterface {
         $this->authCache = $authCache ?? new InMemoryAuthorizationCache();
     }
 
-    public function setLogger(LoggerInterface $logger){
+    public function setLogger(LoggerInterface $logger) : void{
         $this->client = null;
         $this->logger = $logger;
     }

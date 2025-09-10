@@ -19,7 +19,7 @@ class ExportParameters {
     public ?PdfReport $pdfReport;
     public ?CrawledVersion $crawledVersion;
 
-    public function __construct(string $scanId, string $exportId, string $completionHook, array $extraProperties = []){
+    public function __construct(string $scanId, string $exportId, string $completionHook){
         $this->scanId = $scanId;
         $this->exportId = $exportId;
         $this->completionWebhook = $completionHook;

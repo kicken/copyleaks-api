@@ -34,13 +34,13 @@ class ExportCrawledVersionTest extends TestCase {
         $this->assertEquals($this->sampleResponse->metadata->words, $result->metadata->words);
 
         if (isset($this->sampleResponse->html)){
-            //HTML structure does not have pages, but does have group IDs
+            //HTML structure does not have pages but does have group IDs
             $this->assertEquals($this->sampleResponse->html->value, $result->html->value);
             $this->assertNull($result->html->pages);
             $this->assertNotNull($result->html->exclude->groupIds);
         }
 
-        //Text structure has pages, but does not have group IDs
+        //Text structure has pages but does not have group IDs
         $this->assertEquals($this->sampleResponse->text->value, $result->text->value);
         $this->assertNotNull($result->text->pages);
         $this->assertNull($result->text->exclude->groupIds);

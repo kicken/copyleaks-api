@@ -10,7 +10,7 @@ The easiest way to install this is to use composer.
 
 ## Usage
 
-First create a new instance of the **CopyleaksAPI** class. Then you can use the *scans()* and *downloads()* methods to access the api
+First, create a new instance of the **CopyleaksAPI** class. Then you can use the *scans()* and *downloads()* methods to access the api
 endpoints.
 
 Here are quick examples to help you get going. Read the library source for more details about features and how to use the library.
@@ -69,8 +69,8 @@ Here are quick examples to help you get going. Read the library source for more 
 
 ## Login token caching
 
-Copyleaks recommends caching and re-using the provided authorization token as it is valid for 48-hours. This library by default will cache
-the token in memory. To cache the token elsewhere (such as to persistent storage) you can provide a custom implementation of the
+Copyleaks recommends caching and re-using the provided authorization token as it is valid for 48-hours. This library, by default, will cache
+the token in memory. To cache the token elsewhere (such as to persistent storage), you can provide a custom implementation of the
 AuthorizationCache interface.
 
 
